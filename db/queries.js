@@ -43,9 +43,16 @@ const { ObjectId } = require('mongodb');
  *
  * Hint: insertOne. Nothing fancy.
  */
+
 async function signupUser(db, userData) {
-  // TODO: implement
-  throw new Error('signupUser not implemented');
+  await db.collection('users').createIndex({ email: 1 }, { unique: true });
+  const result = await db.collection('users').insertOne({
+    email: userData.email,
+    passwordHash: userData.passwordHash,
+    name: userData.name,
+    createdAt: new Date()
+  });
+  return { insertedId: result.insertedId };
 }
 
 /**
@@ -63,9 +70,9 @@ async function signupUser(db, userData) {
  *
  * Hint: findOne with an exact-match filter.
  */
+
 async function loginFindUser(db, email) {
-  // TODO: implement
-  throw new Error('loginFindUser not implemented');
+  return await db.collection('users').findOne({ email });
 }
 
 /**
